@@ -47,9 +47,9 @@ if [ $FLAG = "-n" ];then
 	echo Private : $PRIVATE
 fi
 
-curl -u ${USERNAME}:${TOKEN} https://api.github.com/user/repos -d "{\"name\":\"${REPONAME}\", \"description\":\"${DESCRIPTION}\", \"private\":\"${PRIVATE}\"}"
+# curl -u ${USERNAME}:${TOKEN} https://api.github.com/user/repos -d "{\"name\":\"${REPONAME}\", \"description\":\"${DESCRIPTION}\", \"private\":\"${PRIVATE}\"}"
 
-git remote set-url origin https://github.com/${USERNAME}/${REPONAME}.git
-git push --set-upstream origin master
+# git remote set-url origin https://github.com/${USERNAME}/${REPONAME}.git
+# git push --set-upstream origin master
 
 
