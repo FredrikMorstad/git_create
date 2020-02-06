@@ -14,7 +14,7 @@ if [ $NARGS != 1 ] && [ $NARGS != 4 ];then
 fi
 
 if [ $FLAG = "-h" ];then
-	echo git create is dependent on a woring git config
+	echo git create is dependent on a working git config
 	echo Synyax for git create:"\n"
 	echo git create [-flag] [repo name] [description] [private] "\n"
 	echo -flag:"\n"-n "->" create a new git repository 
@@ -47,9 +47,9 @@ if [ $FLAG = "-n" ];then
 	echo Private : $PRIVATE
 fi
 
-# curl -u ${USERNAME}:${TOKEN} https://api.github.com/user/repos -d "{\"name\":\"${REPONAME}\", \"description\":\"${DESCRIPTION}\", \"private\":\"${PRIVATE}\"}"
+curl -u ${USERNAME}:${TOKEN} https://api.github.com/user/repos -d "{\"name\":\"${REPONAME}\", \"description\":\"${DESCRIPTION}\", \"private\":\"${PRIVATE}\"}"
 
-# git remote set-url origin https://github.com/${USERNAME}/${REPONAME}.git
-# git push --set-upstream origin master
+git remote set-url origin https://github.com/${USERNAME}/${REPONAME}.git
+git push --set-upstream origin master
 
 
