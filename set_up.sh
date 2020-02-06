@@ -1,3 +1,4 @@
+#!/bin/bash
 #!/bin/sh
 
 ROOT=$(pwd)
@@ -16,9 +17,14 @@ PATH=${CURRENTDIR}/${FILE}
 
 echo $(pwd)
 echo $FILE
+echo $HOME
 
 /bin/cat >> $RC <<EOF
 
 alias git-create="./$FILE"
 
 EOF
+
+# $(source ~/.bashrc)
+# $(. ~/.bashrc)
+# # $(exec .bashrc)
