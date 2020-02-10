@@ -46,10 +46,15 @@ if [ $FLAG = "-n" ];then
 	PRIVATE=$4
 	echo Private : $PRIVATE
 fi
-
+LINK=https://github.com/${USERNAME}/${REPONAME}.git
 curl -u ${USERNAME}:${TOKEN} https://api.github.com/user/repos -d "{\"name\":\"${REPONAME}\", \"description\":\"${DESCRIPTION}\", \"private\":\"${PRIVATE}\"}"
-
-git remote set-url origin https://github.com/${USERNAME}/${REPONAME}.git
-git push --set-upstream origin master
+git clone ${LINK}
+cd $2
+echo "# test" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin ${LINK}
+git push -u origin master
 
 
