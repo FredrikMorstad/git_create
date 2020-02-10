@@ -17,8 +17,10 @@ CURRENTDIR=$(pwd)
 PATH=${CURRENTDIR}
 
 /bin/cat >> $RC <<EOF
- 
 alias git-create="./$FILE"
 EOF
-$exec $bash
+
+#not working for some reason
+# $(source ~/.bashrc)
+# $exec $bash
 # $reload
