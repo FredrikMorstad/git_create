@@ -6,18 +6,21 @@ RC=.bashrc
 FILE=git_create.sh
 
 cp ${ROOT}/${FILE} ${HOME}
-echo ${ROOT}/${FILE} ${HOME}
+# echo ${ROOT}/${FILE} ${HOME}
 
 cd
+
+mv git_create.sh .git_create.sh
+
+FILE=.git_create.sh
+
 CURRENTDIR=$(pwd)
 
-# find . -maxdepth 1 -name $RC
+PATH=${CURRENTDIR}
 
-PATH=${CURRENTDIR}/${FILE}
-
-echo $(pwd)
-echo $FILE
-echo $HOME
+# echo $(pwd)
+# echo $FILE
+# echo $HOME
 
 /bin/cat >> $RC <<EOF
 
