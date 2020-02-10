@@ -17,10 +17,12 @@ CURRENTDIR=$(pwd)
 PATH=${CURRENTDIR}
 
 /bin/cat >> $RC <<EOF
-alias git-create="./$FILE"
+
+alias git-create="${CURRENTDIR}/$FILE"
 EOF
 
 #not working for some reason
-# $(source ~/.bashrc)
-# $exec $bash
+# $source ~/.bashrc
+# exec $bash
+# $(. ~/.bashrc)
 # $reload
