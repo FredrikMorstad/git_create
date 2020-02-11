@@ -1,5 +1,4 @@
 #!/bin/sh
-
 USERNAME=$(git config user.name)
 TOKEN=$(git config user.token)
 REPONAME=""
@@ -57,4 +56,12 @@ git commit -m "first commit"
 git remote add origin ${LINK}
 git push -u origin master
 
+echo "Do you want to change URL to SSH? (y/n): " 
+read SSH
+
+if [[ $SSH = "y" ]] || [[ $SSH = "Y" ]]; then
+	echo Changing to SSH...
+	git remote set-url origin git@github.com:${USERNAME}/${REPONAME}
+fi
+echo Keeping HTTPS...
 
