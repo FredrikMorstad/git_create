@@ -63,15 +63,15 @@ if [ $FLAG = "-n" ];then
 	echo Public : $PUBLIC
 fi
 
-# LINK=https://github.com/${USERNAME}/${REPONAME}.git
-# curl -u ${USERNAME}:${TOKEN} https://api.github.com/user/repos -d "{\"name\":\"${REPONAME}\", \"description\":\"${DESCRIPTION}\", \"public\":\"${PUBLIC}\"}"
-# git clone ${LINK}
-# cd $2
-# echo "# test" >> README.md
-# git init
-# git add README.md
-# git commit -m "first commit"
-# git remote add origin ${LINK}
-# git push -u origin master
+LINK=https://github.com/${USERNAME}/${REPONAME}.git
+curl -u ${USERNAME}:${TOKEN} https://api.github.com/user/repos -d "{\"name\":\"${REPONAME}\", \"description\":\"${DESCRIPTION}\", \"public\":\"${PUBLIC}\"}"
+git clone ${LINK}
+cd $2
+echo "# test" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin ${LINK}
+git push -u origin master
 
 
