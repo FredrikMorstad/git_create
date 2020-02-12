@@ -1,12 +1,14 @@
 #!/bin/sh
 
 USERNAME=$(git config user.username)
+USERNAME=$(git config user.name)
 TOKEN=$(git config user.token)
 REPONAME=""
 DESCRIPTION=""
 NARGS=$#
 FLAG=$1
 URL="HTTPS"
+var=:
 
 if [ $NARGS != 1 ] && [ $NARGS != 5 ] && [ $NARGS != 4 ];then
 	echo Wrong use of git create, try -h for help
@@ -46,6 +48,7 @@ if [ $FLAG = "-n" ];then
 
 	if [  -z $TOKEN ];then
 		echo Token not found "\n"proceeding...
+		var=""
 	fi
 
 	yn=$4
@@ -76,20 +79,20 @@ if [ $FLAG = "-n" ];then
 	echo Public : $PUBLIC
 	echo URL : $URL
 fi
+curl -u ${USERNAME} https://api.github.com/user/repos -d "{\"name\":\"${REPONAME}\"}"
+# LINK=https://github.com/${USERNAME}/${REPONAME}.git
+curl -u ${USERNAME}${var}${TOKEN} https://api.github.com/user/repos -d "{\"name\":\"${REPONAME}\", \"description\":\"${DESCRIPTION}\", \"public\":\"${PUBLIC}\"}"
+# git clone ${LINK}
+# cd $2
+# echo "# test" >> README.md
+# git init
+# git add README.md
+# git commit -m "first commit"
+# git remote add origin ${LINK}
+# git push -u origin master
 
-LINK=https://github.com/${USERNAME}/${REPONAME}.git
-curl -u ${USERNAME}:${TOKEN} https://api.github.com/user/repos -d "{\"name\":\"${REPONAME}\", \"description\":\"${DESCRIPTION}\", \"public\":\"${PUBLIC}\"}"
-git clone ${LINK}
-cd $2
-echo "# test" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git remote add origin ${LINK}
-git push -u origin master
+# if [ $URL = "SSH" ] || [ $URL = "ssh" ]; then
 
-if [ $URL = "SSH" ] || [ $URL = "ssh" ]; then
-
-	git remote set-url origin git@github.com:${USERNAME}/${REPONAME}
-fi
+# 	git remote set-url origin git@github.com:${USERNAME}/${REPONAME}
+# fi
 
