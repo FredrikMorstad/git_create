@@ -1,7 +1,7 @@
 #!/bin/sh
 
 USERNAME=$(git config user.username)
-USERNAME=$(git config user.name)
+NAME=$(git config user.name)
 TOKEN=$(git config user.token)
 REPONAME=""
 DESCRIPTION=""
@@ -31,10 +31,29 @@ if [ $FLAG = "-n" ];then
 
 	echo Gathering information...
 
-	if [ -z $USERNAME ];then
+	if [ -z "$USERNAME" ] && [ -z "$NAME" ];then
 		echo Missing git config name, enter github user name:
 		read USERNAME
 	fi
+
+	if [ ! -z "$USERNAME" ] && [ ! -z "$NAME" ];then
+		echo Found two names in the gitconfig which is the github userename: 
+		echo $USERNAME"(1)" $NAME"(2)"
+		read option
+		while true; do
+    		case $option in
+        		[1]* ) break;;
+        		[2]* ) USERNAME=$NAME break;;
+				* ) echo "Please choose option 1 or 2 "; read option; continue;
+    		esac
+		done
+
+	fi
+
+	if [ -z "$USERNAME" ];then
+		USERNAME=$NAME
+	fi
+
 	REPONAME=$2
 	VERIFY=$(git ls-remote https://github.com/${USERNAME}/${REPONAME}.git 2> /dev/null)
 	echo $verify
@@ -79,9 +98,9 @@ if [ $FLAG = "-n" ];then
 	echo Public : $PUBLIC
 	echo URL : $URL
 fi
-curl -u ${USERNAME} https://api.github.com/user/repos -d "{\"name\":\"${REPONAME}\"}"
+
 # LINK=https://github.com/${USERNAME}/${REPONAME}.git
-curl -u ${USERNAME}${var}${TOKEN} https://api.github.com/user/repos -d "{\"name\":\"${REPONAME}\", \"description\":\"${DESCRIPTION}\", \"public\":\"${PUBLIC}\"}"
+# curl -u ${USERNAME}${var}${TOKEN} https://api.github.com/user/repos -d "{\"name\":\"${REPONAME}\", \"description\":\"${DESCRIPTION}\", \"public\":\"${PUBLIC}\"}"
 # git clone ${LINK}
 # cd $2
 # echo "# test" >> README.md
