@@ -6,16 +6,17 @@ REPONAME=""
 DESCRIPTION=""
 NARGS=$#
 FLAG=$1
+SSH=$5
 
-if [ $NARGS != 1 ] && [ $NARGS != 4 ];then
+if [ $NARGS != 1 ] && [ $NARGS != 5 ];then
 	echo Wrong use of git create, try -h for help
 	exit 1
 fi
 
 if [ $FLAG = "-h" ];then
 	echo git create is dependent on a working git config
-	echo Synyax for git create:"\n"
-	echo git create [-flag] [repo name] [description] [public"(y/n)"] "\n"
+	echo Syntax for git create:"\n"
+	echo git create [-flag] [repo name] [description] [public"(y/n)"] [ssh"(y/n)"]"\n"
 	echo -flag:"\n"-n "->" create a new git repository 
 	exit 1
 fi
