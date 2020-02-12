@@ -4,7 +4,6 @@ USERNAME=$(git config user.name)
 TOKEN=$(git config user.token)
 REPONAME=""
 DESCRIPTION=""
-PUBLIC=""
 NARGS=$#
 FLAG=$1
 
@@ -33,9 +32,18 @@ if [ $FLAG = "-n" ];then
 		echo Missing git config name, enter github user name:
 		read USERNAME
 	fi
+	REPONAME=$2
+	VERIFY=$(git ls-remote https://github.com/${USERNAME}/${REPONAME}.git 2> /dev/null)
+	echo $verify
+
+	if [ ! -z "$VERIFY" ];then
+		echo This repository name is taken
+		exit 1
+	fi
+
 	echo Github username : $USERNAME
 
-	if [ -z $TOKEN ];then
+	if [  -z $TOKEN ];then
 		echo Token not found "\n"proceeding...
 	fi
 
@@ -48,7 +56,6 @@ if [ $FLAG = "-n" ];then
     	esac
 	done
 
-	REPONAME=$2
 	echo Repository name : $REPONAME
 	DESCRIPTION=$3
 	echo Description : $DESCRIPTION
@@ -56,15 +63,15 @@ if [ $FLAG = "-n" ];then
 	echo Public : $PUBLIC
 fi
 
-LINK=https://github.com/${USERNAME}/${REPONAME}.git
-curl -u ${USERNAME}:${TOKEN} https://api.github.com/user/repos -d "{\"name\":\"${REPONAME}\", \"description\":\"${DESCRIPTION}\", \"public\":\"${PUBLIC}\"}"
-git clone ${LINK}
-cd $2
-echo "# test" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git remote add origin ${LINK}
-git push -u origin master
+# LINK=https://github.com/${USERNAME}/${REPONAME}.git
+# curl -u ${USERNAME}:${TOKEN} https://api.github.com/user/repos -d "{\"name\":\"${REPONAME}\", \"description\":\"${DESCRIPTION}\", \"public\":\"${PUBLIC}\"}"
+# git clone ${LINK}
+# cd $2
+# echo "# test" >> README.md
+# git init
+# git add README.md
+# git commit -m "first commit"
+# git remote add origin ${LINK}
+# git push -u origin master
 
 
