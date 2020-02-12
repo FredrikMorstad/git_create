@@ -4,17 +4,19 @@ ROOT=$(pwd)
 RC=.bashrc
 FILE=git_create.sh
 
-cp ${ROOT}/${FILE} ${HOME}
+# cp ${ROOT}/${FILE} ${HOME}
 
 cd
 
-mv git_create.sh .git_create.sh
+# mv git_create.sh .git_create.sh
 
 FILE=.git_create.sh
 
 CURRENTDIR=$(pwd)
 
 PATH=${CURRENTDIR}
+
+# $grep $git_create $RC
 
 /bin/cat >> $RC <<EOF
 
