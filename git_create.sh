@@ -99,19 +99,19 @@ if [ $FLAG = "-n" ];then
 	echo URL : $URL
 fi
 
-# LINK=https://github.com/${USERNAME}/${REPONAME}.git
-# curl -u ${USERNAME}${var}${TOKEN} https://api.github.com/user/repos -d "{\"name\":\"${REPONAME}\", \"description\":\"${DESCRIPTION}\", \"public\":\"${PUBLIC}\"}"
-# git clone ${LINK}
-# cd $2
-# echo "# test" >> README.md
-# git init
-# git add README.md
-# git commit -m "first commit"
-# git remote add origin ${LINK}
-# git push -u origin master
+LINK=https://github.com/${USERNAME}/${REPONAME}.git
+curl -u ${USERNAME}${var}${TOKEN} https://api.github.com/user/repos -d "{\"name\":\"${REPONAME}\", \"description\":\"${DESCRIPTION}\", \"public\":\"${PUBLIC}\"}"
+git clone ${LINK}
+cd $2
+echo "# test" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git remote add origin ${LINK}
+git push -u origin master
 
-# if [ $URL = "SSH" ] || [ $URL = "ssh" ]; then
+if [ $URL = "SSH" ] || [ $URL = "ssh" ]; then
 
-# 	git remote set-url origin git@github.com:${USERNAME}/${REPONAME}
-# fi
+	git remote set-url origin git@github.com:${USERNAME}/${REPONAME}
+fi
 
