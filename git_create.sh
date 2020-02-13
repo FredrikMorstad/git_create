@@ -103,7 +103,7 @@ LINK=https://github.com/${USERNAME}/${REPONAME}.git
 curl -u ${USERNAME}${var}${TOKEN} https://api.github.com/user/repos -d "{\"name\":\"${REPONAME}\", \"description\":\"${DESCRIPTION}\", \"public\":\"${PUBLIC}\"}"
 git clone ${LINK}
 cd $2
-echo "# test" >> README.md
+echo "# ${DESCRIPTION}" >> README.md
 git init
 git add README.md
 git commit -m "first commit"
