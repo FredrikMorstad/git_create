@@ -111,7 +111,6 @@ git remote add origin ${LINK}
 git push -u origin master
 
 if [ $URL = "SSH" ] || [ $URL = "ssh" ]; then
-
 	git remote set-url origin git@github.com:${USERNAME}/${REPONAME}
 fi
 
