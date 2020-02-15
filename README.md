@@ -4,7 +4,7 @@ A script to create a git repository from the terminal
 
 To setup the file with alias run the setup file. This will create bind the git_create script to git-create
 
-Syntax: git-create [-flag] [repo name] [description] [private] [ssh/https(default)]
+Syntax: git-create [-flag] [repo name] [description] [public(y/n)] [ssh/https(default)]
 
 -h for help
 
