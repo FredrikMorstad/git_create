@@ -24,9 +24,5 @@ EOF
 
 fi
 
-#not working for some reason
-# source ~/.bashrc
-# exec $bash
-# . ~/.bashrc
 cd $root
 bash
