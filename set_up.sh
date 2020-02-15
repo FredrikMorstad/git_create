@@ -1,30 +1,32 @@
 #!/bin/bash
 
-ROOT=$(pwd)
-RC=.bashrc
-FILE=git_create.sh
+root=$(pwd)
+rcfile=.bashrc
+file=git_create.sh
 
-# cp ${ROOT}/${FILE} ${HOME}
+cp ${root}/${file} ${HOME}
 
 cd
 
-# mv git_create.sh .git_create.sh
+mv git_create.sh .git_create.sh
 
-FILE=.git_create.sh
+file=.git_create.sh
 
-CURRENTDIR=$(pwd)
+currentdir=$(pwd)
 
-PATH=${CURRENTDIR}
+a=${currentdir}
 
-# $grep $git_create $RC
-
-/bin/cat >> $RC <<EOF
-
-alias git-create="${CURRENTDIR}/$FILE"
+if ! (grep "alias git-create="\"${currentdir}/$file"" ${rcfile} >/dev/null); then
+echo adding alias in bashrc...
+cat >> $rcfile <<EOF
+alias git-create="${currentdir}/${file}"
 EOF
 
+fi
+
 #not working for some reason
-# $source ~/.bashrc
+# source ~/.bashrc
 # exec $bash
-# $(. ~/.bashrc)
-# $reload
+# . ~/.bashrc
+cd $root
+bash
