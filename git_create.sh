@@ -48,7 +48,7 @@ recive_answer(){
 	done
 }
 
-crete_repo(){
+create_repo(){
 
 	if [ -z "$description" ]; then
 		description=$reponame
@@ -125,7 +125,7 @@ verify(){
 		echo Token not found "\n"proceeding...
 		var=""
 	fi
-	crete_repo
+	create_repo
 }
 
 while [ "$1" != "" ]; do
