@@ -1,13 +1,21 @@
 #!/bin/bash
 
+
 root=$(pwd)
 rcfile=.bashrc
 file=git_create.sh
 
-
 cp ${root}/${file} ${HOME}
 
 cd
+a=$(find . -maxdepth 1 -name '.bashrc')
+echo $a
+if [ -z a ];then
+	echo bashrc not found
+	exit 1
+fi
+
+
 echo Moving file to the home directory..;echo
 
 mv git_create.sh .git_create.sh
