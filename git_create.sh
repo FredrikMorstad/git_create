@@ -1,28 +1,30 @@
 #!/bin/sh
 
-USERNAME=$(git config user.username)
-NAME=$(git config user.name)
-TOKEN=$(git config user.token)
-REPONAME=""
-DESCRIPTION=""
-NARGS=$#
-FLAG=$1
-URL="HTTPS"
+username=$(git config user.username)
+name=$(git config user.name)
+token=$(git config user.token)
+reponame=""
+description=""
+nargs=$#
+flag=$1
+url="HTTPS"
 var=:
 ans=""
+new_repo=""
+public="true"
 
-if [ $NARGS != 1 ] && [ $NARGS != 5 ] && [ $NARGS != 4 ];then
-	echo Wrong use of git create, try -h for help
-	exit 1
-fi
+# if [ $nargs != 1 ] && [ $nargs != 5 ] && [ $nargs != 4 ];then
+# 	echo Wrong use of git create, try -h for help
+# 	exit 1
+# fi
+usage(){
 
-if [ $FLAG = "-h" ];then
 	echo git create is dependent on a working git config
 	echo Syntax for git create:"\n"
 	echo git create [-flag] [repo name] [description] [public"(y/n)"] [ssh "(optional)"]"\n"
 	echo -flag:"\n"-n "->" create a new git repository 
 	exit 1
-fi
+}
 
 # need to update the read value into the right value after the function call not pass ans value means to read input
 recive_answer(){
@@ -45,104 +47,107 @@ recive_answer(){
 		esac
 	done
 }
- 
 
+crete_repo(){
 
-if [ $FLAG = "-n" ];then
-	if [ $NARGS != 4 ] && [ $NARGS != 5 ];then
-		echo missing arguments
-		exit 1
+	if [ -z "$description" ]; then
+		description=$reponame
 	fi
 
-	echo Gathering information...
+	echo Repository name : $reponame
+	echo Description : $description
+	echo Public : $public
+	echo url : $url
 
-	if [ -z "$USERNAME" ] && [ -z "$NAME" ];then
+	LINK=https://github.com/${username}/${reponame}.git
+	curl -u ${username}${var}${token} https://api.github.com/user/repos -d "{\"name\":\"${reponame}\", \"description\":\"${description}\", \"public\":\"${public}\"}"
+
+
+	submod=""
+
+	if [ -d .git ]; then
+	echo You are currently inside a git repository, do you want to add this folder as a submodule?"(y/n)"
+	recive_answer "Yy" "Nn" "y" "" "Please answer yes(y) or no(n)"
+	submod=$ans
+
+	fi
+	git clone ${LINK}
+	cd $2
+	echo "# ${description}" >> README.md
+	git init
+	git add README.md
+	git commit -m "first commit"
+	git remote add origin ${LINK}
+	git push -u origin master
+
+	if [ ! -z "$submod" ]; then
+		echo adding submodule...
+		cd ..
+		git submodule add ${LINK}
+		git add *
+		git commit -m "submodule created"
+		git push
+	fi
+
+	if [ $url = "SSH" ] || [ $url = "ssh" ]; then
+		git remote set-url origin git@github.com:${username}/${reponame}
+	fi
+}
+
+verify(){
+
+	if [ -z "$username" ] && [ -z "$name" ];then
 		echo Missing git config name, enter github user name:
-		read USERNAME
+		read username
 	fi
 
-	if [ ! -z "$USERNAME" ] && [ ! -z "$NAME" ];then
+	if [ ! -z "$username" ] && [ ! -z "$name" ];then
 		echo Found two names in the gitconfig which is the github userename: 
-		echo $USERNAME"(1)" $NAME"(2)"
+		echo $username"(1)" $name"(2)"
 
-		recive_answer 1 2 "$USERNAME" "$NAME" "Please choose option 1 or 2"
-		USERNAME=$ans
+		recive_answer 1 2 "$username" "$name" "Please choose option 1 or 2"
+		username=$ans
 	fi
 
-	if [ -z "$USERNAME" ];then
-		USERNAME=$NAME
+	if [ -z "$username" ];then
+		username=$name
 	fi
 
-	REPONAME=$2
-	VERIFY=$(git ls-remote https://github.com/${USERNAME}/${REPONAME}.git 2> /dev/null)
 
-	if [ ! -z "$VERIFY" ];then
+	name_taken=$(git ls-remote https://github.com/${username}/${reponame}.git 2> /dev/null)
+
+	if [ ! -z "$name_taken" ];then
 		echo This repository name is taken
 		exit 1
 	fi
 
-	echo Github username : $USERNAME
-
-	if [  -z $TOKEN ];then
+	if [  -z $token ];then
 		echo Token not found "\n"proceeding...
 		var=""
 	fi
+	crete_repo
+}
 
-	ans=$4
-	recive_answer "Yy" "Nn" "true" "false" "Please answer if you want public repository." "$ans"
-	PUBLIC=$ans
+while [ "$1" != "" ]; do
+	case $1 in
+		-n | --new) new_repo=1 ;;
 
-	if [ $NARGS = 5 ]; then
-		URL=$5
-		while true; do
-			case $URL in
-				SSH|ssh ) URL="SSH" break;;
-				HTTPS|https ) URL="HTTPS" break;;
-				* ) echo "Please answer which URL you want (ssh/https)"; read URL; continue;
-			esac
-		done	
-			
-	fi
+		-name | --repo_name) shift; reponame=$1;;
 
-	echo Repository name : $REPONAME
-	DESCRIPTION=$3
-	echo Description : $DESCRIPTION
-	echo Public : $PUBLIC
-	echo URL : $URL
+		-d | --description) shift; description=$1;;
+
+		-priv | --private) public="false";;
+
+		-ssh | --ssh) url="ssh";;
+		
+		-h | --help ) usage;;
+
+		* ) usage;;
+
+	esac
+	shift
+done
+
+if [ new_repo == 1 ]; then
+	verify
 fi
-
-LINK=https://github.com/${USERNAME}/${REPONAME}.git
-curl -u ${USERNAME}${var}${TOKEN} https://api.github.com/user/repos -d "{\"name\":\"${REPONAME}\", \"description\":\"${DESCRIPTION}\", \"public\":\"${PUBLIC}\"}"
-
-
-submod=""
-
-if [ -d .git ]; then
-	echo You are currently inside a git repository, do you want to add this folder as a submodule?"(y/n)"
-	recive_answer "Yy" "Nn" "y" "" "Please answer yes(y) or no(n)"
-	submod=$ans
-fi
-git clone ${LINK}
-cd $2
-echo "# ${DESCRIPTION}" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git remote add origin ${LINK}
-git push -u origin master
-
-if [ ! -z "$submod" ]; then
-	echo adding submodule...
-	cd ..
-	git submodule add ${LINK}
-	git add *
-	git commit -m "submodule created"
-	git push
-fi
-
-if [ $URL = "SSH" ] || [ $URL = "ssh" ]; then
-	git remote set-url origin git@github.com:${USERNAME}/${REPONAME}
-fi
-
-
-
