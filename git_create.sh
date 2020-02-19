@@ -21,7 +21,9 @@ usage(){
 
 	echo git create is dependent on a working git config
 	echo Syntax for git create:"\n"
-	echo git create [-flag] [repo name] [description] [public"(y/n)"] [ssh "(optional)"]"\n"
+	echo git create [-flag]:
+	echo -n or --new to create a new repository
+	echo [repo name] [description] [public"(y/n)"] [ssh "(optional)"]"\n"
 	echo -flag:"\n"-n "->" create a new git repository 
 	exit 1
 }
@@ -50,12 +52,8 @@ recive_answer(){
 
 create_repo(){
 
-	if [ -z "$description" ]; then
-		description=$reponame
-	fi
-
-	echo Repository name : $reponame
 	echo Description : $description
+	echo Repository name : $reponame
 	echo Public : $public
 	echo url : $url
 
@@ -148,6 +146,11 @@ while [ "$1" != "" ]; do
 	shift
 done
 
-if [ new_repo == 1 && ! -z "$reponame" ]; then
+if [ -z "$description" ]; then
+	description=$reponame
+fi
+
+echo $new_repo $description
+if [ $new_repo = 1 ] && [  ! -z "$reponame" ]; then
 	verify
 fi
