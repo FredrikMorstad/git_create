@@ -148,6 +148,6 @@ while [ "$1" != "" ]; do
 	shift
 done
 
-if [ new_repo == 1 ]; then
+if [ new_repo == 1 && ! -z "$reponame" ]; then
 	verify
 fi
