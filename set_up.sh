@@ -8,7 +8,7 @@ file=git_create.sh
 cp ${root}/${file} ${HOME}
 
 cd
-a=$(find . -maxdepth 1 -name '.bashrc')
+# a=$(find . -maxdepth 1 -name '.bashrc')
 echo $a
 if [ -z a ];then
 	echo bashrc not found
@@ -36,3 +36,4 @@ echo Looks like you already have a git-create alias;echo
 cd $root
 echo Reloading the bash files
 bash
+exit

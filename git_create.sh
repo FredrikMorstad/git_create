@@ -12,15 +12,27 @@ var=:
 ans=""
 new_repo=""
 public="true"
+desc=""
+n=0
 
 usage(){
+printf "
+Syntax: git-create [-flag] [-required] [-optional] 
 
-	echo git create is dependent on a working git config
-	echo Syntax for git create:"\n"
-	echo git create [-flag]:
-	echo -n or --new to create a new repository
-	echo [repo name] [description] [public"(y/n)"] [ssh "(optional)"]"\n"
-	echo -flag:"\n"-n "->" create a new git repository 
+Flag -n:
+	-n or --new to create a empty repository with README
+Required:
+	-name or --repo_name is required for creating a new repository
+Optional:
+	-d or --description is optional, and it will be the repository name by default 
+
+	-priv or --private will make the repository private (by default false)
+
+	-ssh or --SSH wil change the repository URL, and the URL are https by default
+		
+Flag -h for help
+
+"
 	exit 1
 }
 
@@ -122,17 +134,44 @@ verify(){
 	create_repo
 }
 
+parse_description(){
+	exit=0
+	while [ "$1" != "" ]; do
+		case $1 in 
+			-name | --repo_name) exit=1 break;;
+
+			-priv | --private) exit=1 break;;
+
+			-ssh | --SSH) exit=1 break;;
+
+			-h | --help ) exit=1 break;;
+
+			* ) desc="$desc $1";;
+		esac
+		shift
+		n=$((n+1))
+	done
+
+	if [ $exit = 0 ]; then
+		usage
+	fi
+}
+
+if [ $nargs = 0 ]; then
+	usage
+fi
+
 while [ "$1" != "" ]; do
 	case $1 in
 		-n | --new) new_repo=1 ;;
 
 		-name | --repo_name) shift; reponame=$1;;
 
-		-d | --description) shift; description=$1;;
+		-d | --description) shift; parse_description $@; description=$desc; shift $n;;
 
 		-priv | --private) public="false";;
 
-		-ssh | --ssh) url="ssh";;
+		-ssh | --SSH) url="ssh";;
 		
 		-h | --help ) usage;;
 
@@ -141,6 +180,7 @@ while [ "$1" != "" ]; do
 	esac
 	shift
 done
+
 
 if [ $new_repo = 1 ] && [  ! -z "$reponame" ]; then
 	if [ -z "$description" ]; then
