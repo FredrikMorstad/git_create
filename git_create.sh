@@ -13,10 +13,6 @@ ans=""
 new_repo=""
 public="true"
 
-# if [ $nargs != 1 ] && [ $nargs != 5 ] && [ $nargs != 4 ];then
-# 	echo Wrong use of git create, try -h for help
-# 	exit 1
-# fi
 usage(){
 
 	echo git create is dependent on a working git config
@@ -70,7 +66,7 @@ create_repo(){
 
 	fi
 	git clone ${LINK}
-	cd $2
+	cd $reponame
 	echo "# ${description}" >> README.md
 	git init
 	git add README.md
@@ -146,11 +142,9 @@ while [ "$1" != "" ]; do
 	shift
 done
 
-if [ -z "$description" ]; then
-	description=$reponame
-fi
-
-echo $new_repo $description
 if [ $new_repo = 1 ] && [  ! -z "$reponame" ]; then
+	if [ -z "$description" ]; then
+		description=$reponame
+	fi
 	verify
 fi
