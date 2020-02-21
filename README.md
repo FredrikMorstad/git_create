@@ -6,7 +6,7 @@ To setup the file with alias run the setup file. This will bind the git_create s
 
 Syntax: git-create [-flag] [-required] [-optional]  
 	Flag -n:  
-		*-n or --new to create a empty repository with README  
+		-n or --new to create a empty repository with README  
 	Required:  
 		-name or --repo_name is required for creating a new repository  
 	Optional:  
