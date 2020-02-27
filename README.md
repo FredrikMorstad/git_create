@@ -14,7 +14,7 @@ Syntax: git-create [-flag] [-required] [-optional]
 		-priv or --private will make the repository private(by default false)  
 		-ssh or --SSH wil change the repository URL, and the URL are https by default  
 	Example:  
-		git-create -n -name -d example example -priv -ssh  
+		git-create -n -name "name" -d "example example" -priv -ssh  
 		
 Flag -h for help
 

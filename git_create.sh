@@ -35,7 +35,6 @@ Flag -h for help
 "
 	exit 1
 }
-
 # need to update the read value into the right value after the function call not pass ans value means to read input
 recive_answer(){
 	option1=$1
