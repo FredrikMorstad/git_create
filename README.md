@@ -17,6 +17,3 @@ Syntax: git-create [-flag] [-required] [-optional]
 		git-create -n -name "name" -d "example example" -priv -ssh  
 		
 Flag -h for help
-
-# test1
-# test
