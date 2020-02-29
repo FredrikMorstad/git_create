@@ -68,10 +68,16 @@ create_repo(){
 	verify
 
 	LINK=https://github.com/${username}/${reponame}.git
+
+	if [ -d .git ];then
+		echo You are currently inside a git repository, do you want to add this folder as a submodule?"(y/n)"
+		recive_answer "Yy" "Nn" "y" "" "Please answer yes(y) or no(n)"
+		submod=$ans
+	fi
+
 	git clone ${LINK}
 	cd $reponame
 	push_to_github
-
 }
 
 copy_dir(){
