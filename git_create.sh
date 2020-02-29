@@ -68,6 +68,8 @@ create_repo(){
 	verify
 
 	LINK=https://github.com/${username}/${reponame}.git
+	curl -u ${username}${var}${token} https://api.github.com/user/repos -d "{\"name\":\"${reponame}\", \"description\":\"${description}\", \"public\":\"${public}\"}"
+
 
 	if [ -d .git ];then
 		echo You are currently inside a git repository, do you want to add this folder as a submodule?"(y/n)"
@@ -87,13 +89,12 @@ copy_dir(){
 	if [ -z $reponame ];then
 		reponame=$dir_name
 	fi
+	LINK=https://github.com/${username}/${reponame}.git
+	curl -u ${username}${var}${token} https://api.github.com/user/repos -d "{\"name\":\"${reponame}\", \"description\":\"${description}\", \"public\":\"${public}\"}"
 	push_to_github
 }
 
 push_to_github(){
-
-	LINK=https://github.com/${username}/${reponame}.git
-	curl -u ${username}${var}${token} https://api.github.com/user/repos -d "{\"name\":\"${reponame}\", \"description\":\"${description}\", \"public\":\"${public}\"}"
 
 	git init
 	echo "# ${description}" >> README.md
@@ -118,7 +119,6 @@ push_to_github(){
 
 verify_name(){
 	name_taken=$(git ls-remote https://github.com/${username}/${reponame}.git 2> /dev/null)
-
 	if [ ! -z "$name_taken" ];then
 		echo This repository name is taken
 		echo type inn repository name:
