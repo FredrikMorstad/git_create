@@ -5,8 +5,12 @@ A script to create a git repository from the terminal
 To setup the file with alias run the setup file. This will bind the git_create script to git-create  
 
 Syntax: git-create [-flag] [-required] [-optional]  
-	Flag -n:  
-		-n or --new to create a empty repository with README  
+	Flag 
+		-n:  
+			-n or --new to create a empty repository with README  
+		-cc
+			-cc or --copy makes current directory into a git repository, 
+					and copies the content to github
 	Required:  
 		-name or --repo_name is required for creating a new repository  
 	Optional:  
