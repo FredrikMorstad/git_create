@@ -67,6 +67,7 @@ recive_answer(){
 create_repo(){
 	verify
 
+	LINK=https://github.com/${username}/${reponame}.git
 	git clone ${LINK}
 	cd $reponame
 	push_to_github
