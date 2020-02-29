@@ -11,6 +11,7 @@ Syntax: git-create [-flag] [-required] [-optional]
 		-cc
 			-cc or --copy makes current directory into a git repository, 
 					and copies the content to github
+
 	Required:  
 		-name or --repo_name is required for creating a new repository  
 	Optional:  
