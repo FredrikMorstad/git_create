@@ -14,6 +14,9 @@ new_repo=""
 public="true"
 desc=""
 n=0
+new_repo=0
+copy=0
+submod=""
 
 usage(){
 printf "
@@ -21,8 +24,11 @@ Syntax: git-create [-flag] [-required] [-optional]
 
 Flag -n:
 	-n or --new to create a empty repository with README
+	-cc or --copy makes your current directory a git repository, 
+		and copies all the content to github
 Required:
-	-name or --repo_name is required for creating a new repository
+	-n:
+		-name or --repo_name is required for creating a new repository
 Optional:
 	-d or --description is optional, and it will be the repository name by default 
 
@@ -57,30 +63,34 @@ recive_answer(){
 	done
 }
 
-create_repo(){
 
-	echo Description : $description
-	echo Repository name : $reponame
-	echo Public : $public
-	echo url : $url
+create_repo(){
+	verify
+
+	git clone ${LINK}
+	cd $reponame
+	push_to_github
+
+}
+
+copy_dir(){
+	verify
+	dir_name="${PWD##*/}"
+
+	if [ -z $reponame ];then
+		reponame=$dir_name
+	fi
+	push_to_github
+}
+
+push_to_github(){
 
 	LINK=https://github.com/${username}/${reponame}.git
 	curl -u ${username}${var}${token} https://api.github.com/user/repos -d "{\"name\":\"${reponame}\", \"description\":\"${description}\", \"public\":\"${public}\"}"
 
-
-	submod=""
-
-	if [ -d .git ]; then
-	echo You are currently inside a git repository, do you want to add this folder as a submodule?"(y/n)"
-	recive_answer "Yy" "Nn" "y" "" "Please answer yes(y) or no(n)"
-	submod=$ans
-
-	fi
-	git clone ${LINK}
-	cd $reponame
-	echo "# ${description}" >> README.md
 	git init
-	git add README.md
+	echo "# ${description}" >> README.md
+	git add .
 	git commit -m "first commit"
 	git remote add origin ${LINK}
 	git push -u origin master
@@ -97,6 +107,19 @@ create_repo(){
 	if [ $url = "SSH" ] || [ $url = "ssh" ]; then
 		git remote set-url origin git@github.com:${username}/${reponame}
 	fi
+}
+
+verify_name(){
+	name_taken=$(git ls-remote https://github.com/${username}/${reponame}.git 2> /dev/null)
+
+	if [ ! -z "$name_taken" ];then
+		echo This repository name is taken
+		echo type inn repository name:
+		read reponame
+		verify_name
+	fi
+
+	return
 }
 
 verify(){
@@ -118,19 +141,22 @@ verify(){
 		username=$name
 	fi
 
-
-	name_taken=$(git ls-remote https://github.com/${username}/${reponame}.git 2> /dev/null)
-
-	if [ ! -z "$name_taken" ];then
-		echo This repository name is taken
-		exit 1
-	fi
+	verify_name
 
 	if [  -z $token ];then
 		echo Token not found "\n"proceeding...
 		var=""
 	fi
-	create_repo
+
+	if [ -z "$description" ]; then
+		description=$reponame
+	fi
+
+	echo Description : $description
+	echo Repository name : $reponame
+	echo Public : $public
+	echo url : $url
+
 }
 
 parse_description(){
@@ -162,7 +188,9 @@ fi
 
 while [ "$1" != "" ]; do
 	case $1 in
-		-n | --new) new_repo=1 ;;
+		-n | --new) new_repo=1;;
+
+		-cc | --copy) copy=1;;
 
 		-name | --repo_name) shift; reponame=$1;;
 
@@ -181,9 +209,14 @@ while [ "$1" != "" ]; do
 done
 
 
-if [ $new_repo = 1 ] && [  ! -z "$reponame" ]; then
-	if [ -z "$description" ]; then
-		description=$reponame
+if [ $new_repo = 1 ];then
+	if [ -z "$reponame" ]; then
+		usage
 	fi
-	verify
+
+	create_repo
+fi
+
+if [ $copy = 1 ];then
+	copy_dir
 fi
