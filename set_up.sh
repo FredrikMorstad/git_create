@@ -5,7 +5,7 @@ root=$(pwd)
 rcfile=.bashrc
 file=git_create.sh
 
-cp ${root}/${file} ${HOME}
+cp ${root}/bin/${file} ${HOME}
 
 cd
 # a=$(find . -maxdepth 1 -name '.bashrc')
