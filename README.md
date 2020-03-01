@@ -1,5 +1,7 @@
 # git_create
 
+Use basher to install the script
+
 A script to create a git repository from the terminal  
 
 To setup the file with alias run the setup file. This will bind the git_create script to git-create  
